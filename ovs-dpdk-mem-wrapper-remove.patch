@@ -1,0 +1,90 @@
+From 5e3fe18d5a29a2ec15cff6f76a8db5c0ead54ea9 Mon Sep 17 00:00:00 2001
+From: "Chandran, Sugesh" <sugesh.chandran@intel.com>
+Date: Mon, 2 Jul 2018 11:05:55 +0100
+Subject: [PATCH] memleaks.
+
+Change-Id: I49a2d7bc139db48f3bdab7fc1e0e00e028d6e83a
+Signed-off-by: Chandran, Sugesh <sugesh.chandran@intel.com>
+---
+ lib/util.c | 13 ++++++++-----
+ lib/util.h | 12 ++++++++----
+ 2 files changed, 16 insertions(+), 9 deletions(-)
+
+diff --git a/lib/util.c b/lib/util.c
+index 1c06ce0..3ab3216 100644
+--- a/lib/util.c
++++ b/lib/util.c
+@@ -89,7 +89,7 @@ out_of_memory(void)
+     ovs_abort(0, "virtual memory exhausted");
+ }
+ 
+-void *
++/*void *
+ xcalloc(size_t count, size_t size)
+ {
+     void *p = count && size ? calloc(count, size) : malloc(1);
+@@ -98,14 +98,16 @@ xcalloc(size_t count, size_t size)
+         out_of_memory();
+     }
+     return p;
+-}
++}*/
+ 
++/*
+ void *
+ xzalloc(size_t size)
+ {
+     return xcalloc(1, size);
+-}
++}*/
+ 
++/*
+ void *
+ xmalloc(size_t size)
+ {
+@@ -115,8 +117,9 @@ xmalloc(size_t size)
+         out_of_memory();
+     }
+     return p;
+-}
++}*/
+ 
++/*
+ void *
+ xrealloc(void *p, size_t size)
+ {
+@@ -126,7 +129,7 @@ xrealloc(void *p, size_t size)
+         out_of_memory();
+     }
+     return p;
+-}
++}*/
+ 
+ void *
+ xmemdup(const void *p_, size_t size)
+diff --git a/lib/util.h b/lib/util.h
+index aa38122..f0e08f7 100644
+--- a/lib/util.h
++++ b/lib/util.h
+@@ -115,10 +115,14 @@ const char *get_subprogram_name(void);
+ void ovs_print_version(uint8_t min_ofp, uint8_t max_ofp);
+ 
+ OVS_NO_RETURN void out_of_memory(void);
+-void *xmalloc(size_t) MALLOC_LIKE;
+-void *xcalloc(size_t, size_t) MALLOC_LIKE;
+-void *xzalloc(size_t) MALLOC_LIKE;
+-void *xrealloc(void *, size_t);
++//void *xmalloc(size_t) MALLOC_LIKE;
++#define xcalloc calloc
++#define xzalloc(mem) calloc(1, mem)
++#define xmalloc malloc
++#define xrealloc realloc
++//void *xcalloc(size_t, size_t) MALLOC_LIKE;
++//void *xzalloc(size_t) MALLOC_LIKE;
++//void *xrealloc(void *, size_t);
+ void *xmemdup(const void *, size_t) MALLOC_LIKE;
+ char *xmemdup0(const char *, size_t) MALLOC_LIKE;
+ char *xstrdup(const char *) MALLOC_LIKE;
+-- 
+2.14.1
+
